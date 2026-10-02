@@ -1,10 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
+import "./Analytics.css";
 
 export default function Analytics() {
   const [analytics, setAnalytics] = useState(null);
   const [readiness, setReadiness] = useState(null);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,10 +18,7 @@ export default function Analytics() {
             api.get("/readiness"),
           ]);
 
-        setAnalytics(
-          analyticsResponse.data.analytics
-        );
-
+        setAnalytics(analyticsResponse.data.analytics);
         setReadiness(readinessResponse.data);
       } catch (err) {
         setError(
@@ -37,510 +35,360 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <main className="page">
-        <p>Loading analytics...</p>
+      <main className="page analytics-page">
+        <div className="analytics-state-card">
+          <div className="analytics-spinner" />
+          <h2>Preparing your analytics</h2>
+          <p>Gathering your career progress...</p>
+        </div>
       </main>
     );
   }
 
-  if (error) {
+  if (error || !analytics) {
     return (
-      <main className="page">
-        <section
-          className="dashboard-card"
-          style={{
-            maxWidth: "900px",
-            margin: "30px auto",
-            background: "#fee2e2",
-            color: "#b91c1c",
-          }}
-        >
-          {error}
-        </section>
+      <main className="page analytics-page">
+        <div className="analytics-state-card analytics-error">
+          <div className="analytics-state-icon">!</div>
+          <h2>Analytics unavailable</h2>
+          <p>{error || "No analytics data was returned."}</p>
+          <button
+            className="analytics-primary-button"
+            onClick={() => window.location.reload()}
+          >
+            Try again ↻
+          </button>
+        </div>
       </main>
     );
   }
 
-  const readinessScore = readiness?.score || 0;
+  const readinessScore = clamp(readiness?.score);
+  const requiredSkills = Number(analytics.requiredSkillsCount) || 0;
+  const completedSkills = Number(analytics.completedRequiredSkills) || 0;
+  const skillCompletion = requiredSkills > 0
+    ? clamp((completedSkills / requiredSkills) * 100)
+    : 0;
+
+  const stats = [
+    {
+      icon: "🧠",
+      title: "Total Skills",
+      value: analytics.totalSkills ?? 0,
+      subtitle: "Skills added",
+      color: "violet",
+    },
+    {
+      icon: "📁",
+      title: "Projects",
+      value: analytics.totalProjects ?? 0,
+      subtitle: "Projects recorded",
+      color: "blue",
+    },
+    {
+      icon: "🏆",
+      title: "Certificates",
+      value: analytics.totalCertificates ?? 0,
+      subtitle: "Certificates earned",
+      color: "amber",
+    },
+    {
+      icon: "📈",
+      title: "Overall Progress",
+      value: `${clamp(analytics.overallProgress)}%`,
+      subtitle: "Overall development",
+      color: "green",
+    },
+  ];
+
+  const progressItems = [
+    { title: "Skills Progress", value: analytics.skillProgress, icon: "🧠" },
+    { title: "Projects Progress", value: analytics.projectProgress, icon: "📁" },
+    {
+      title: "Certificate Progress",
+      value: analytics.certificateProgress,
+      icon: "🏆",
+    },
+  ];
+
+  const scoreItems = [
+    { title: "Career Path", score: readiness?.breakdown?.careerPath, max: 20, icon: "🎯" },
+    { title: "Skills", score: readiness?.breakdown?.skills, max: 25, icon: "🧠" },
+    { title: "Projects", score: readiness?.breakdown?.projects, max: 25, icon: "📁" },
+    { title: "Certificates", score: readiness?.breakdown?.certificates, max: 15, icon: "🏆" },
+    {
+      title: "Advanced Skills",
+      score: readiness?.breakdown?.advancedSkills,
+      max: 15,
+      icon: "⚡",
+    },
+  ];
 
   return (
-    <main className="page">
-      {/* Header */}
+    <main className="page analytics-page">
+      <section className="analytics-hero">
+        <div className="analytics-hero-content">
+          <span className="analytics-eyebrow">
+            <span className="analytics-live-dot" />
+            YOUR PERSONAL DASHBOARD
+          </span>
 
-      <section className="dashboard-header">
-        <div>
-          <p className="eyebrow">
-            PROGRESS ANALYTICS
-          </p>
-
-          <h1>Your Career Progress</h1>
+          <h1>
+            Your progress.
+            <br />
+            <span>Your next milestone.</span>
+          </h1>
 
           <p>
-            Track your skills, projects, certificates
-            and overall career development.
+            See how your skills, projects and certificates contribute
+            to your career development.
           </p>
+
+          <div className="analytics-hero-tags">
+            <span>✦ Skills</span>
+            <span>✦ Projects</span>
+            <span>✦ Career readiness</span>
+          </div>
+        </div>
+
+        <div className="analytics-hero-art" aria-hidden="true">
+          <div className="analytics-art-circle circle-one" />
+          <div className="analytics-art-circle circle-two" />
+          <div className="analytics-art-center">
+            <span>↗</span>
+            <small>GROW</small>
+          </div>
+          <span className="analytics-art-star star-one">✦</span>
+          <span className="analytics-art-star star-two">✧</span>
         </div>
       </section>
 
-      {/* Career Readiness */}
-
-      <section
-        className="dashboard-card"
-        style={{
-          maxWidth: "1000px",
-          margin: "30px auto",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: "30px",
-            flexWrap: "wrap",
-          }}
-        >
+      <section className="analytics-section">
+        <div className="analytics-section-heading">
           <div>
-            <p className="eyebrow">
-              CAREER READINESS
-            </p>
+            <span className="analytics-section-label">YOUR OVERVIEW</span>
+            <h2>Career at a glance</h2>
+            <p>A snapshot of your current profile.</p>
+          </div>
+          <span className="analytics-profile-badge">✦ ElevateU</span>
+        </div>
 
-            <h2
-              style={{
-                fontSize: "52px",
-                margin: "8px 0",
-                color: "#4f46e5",
-              }}
-            >
-              {readinessScore}%
-            </h2>
-
-            <h3>
-              {readiness?.level ||
-                "Getting Started"}
-            </h3>
-
+        <div className="analytics-profile-card">
+          <div className="analytics-profile-avatar">
+            {(analytics.userName || "U").trim().charAt(0).toUpperCase()}
+          </div>
+          <div className="analytics-profile-info">
+            <span>Your profile</span>
+            <h3>{analytics.userName || "Learner"}</h3>
             <p>
-              Your score is calculated from your career
-              path, skills, projects and certificates.
+              Career path:{" "}
+              <strong>{analytics.careerPath || "Not selected"}</strong>
             </p>
           </div>
+          <div className="analytics-profile-status">
+            <span className="analytics-live-dot" />
+            Progress overview
+          </div>
+        </div>
 
-          <div
-            style={{
-              width: "140px",
-              height: "140px",
-              borderRadius: "50%",
-              background: `conic-gradient(
-                #4f46e5 ${readinessScore * 3.6}deg,
-                #e5e7eb ${readinessScore * 3.6}deg
-              )`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "105px",
-                height: "105px",
-                borderRadius: "50%",
-                background: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "24px",
-                fontWeight: "700",
-                color: "#4f46e5",
-              }}
+        <div className="analytics-stats-grid">
+          {stats.map((stat) => (
+            <article
+              className={`analytics-stat-card stat-${stat.color}`}
+              key={stat.title}
             >
-              {readinessScore}%
+              <div className="analytics-stat-top">
+                <span className="analytics-stat-icon">{stat.icon}</span>
+                <span className="analytics-stat-mark">↗</span>
+              </div>
+              <p>{stat.title}</p>
+              <h3>{stat.value}</h3>
+              <span className="analytics-stat-subtitle">{stat.subtitle}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="analytics-readiness-card">
+        <div className="analytics-readiness-copy">
+          <span className="analytics-section-label">CAREER READINESS</span>
+          <h2>Keep building your future.</h2>
+          <p>
+            Your readiness score reflects the factors tracked by
+            your ElevateU profile.
+          </p>
+
+          <div className="analytics-readiness-level">
+            <span>Current level</span>
+            <strong>{readiness?.level || "Getting Started"}</strong>
+          </div>
+
+          <div className="analytics-readiness-note">
+            <span>✦</span>
+            <p>Continue updating your skills and projects as you progress.</p>
+          </div>
+        </div>
+
+        <div
+          className="analytics-readiness-ring"
+          style={{
+            "--readiness-angle": `${readinessScore * 3.6}deg`,
+          }}
+          role="img"
+          aria-label={`Career readiness ${readinessScore} percent`}
+        >
+          <div className="analytics-readiness-ring-inner">
+            <strong>{readinessScore}%</strong>
+            <span>Readiness</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="analytics-section">
+        <div className="analytics-section-heading">
+          <div>
+            <span className="analytics-section-label">DEVELOPMENT TRACKER</span>
+            <h2>Progress breakdown</h2>
+            <p>Review the progress values returned by your account.</p>
+          </div>
+        </div>
+
+        <div className="analytics-progress-card">
+          {progressItems.map((item) => (
+            <ProgressBar key={item.title} {...item} />
+          ))}
+        </div>
+      </section>
+
+      <section className="analytics-section">
+        <div className="analytics-section-heading">
+          <div>
+            <span className="analytics-section-label">CAREER SKILLS</span>
+            <h2>Required skill completion</h2>
+            <p>Track your completed required career skills.</p>
+          </div>
+        </div>
+
+        <div className="analytics-completion-card">
+          <div className="analytics-completion-top">
+            <div className="analytics-completion-icon">🎯</div>
+            <div className="analytics-completion-copy">
+              <h3>Skills milestone</h3>
+              <p>
+                {completedSkills} of {requiredSkills} required skills completed
+              </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* User Overview */}
-
-      <section
-        className="dashboard-card"
-        style={{
-          maxWidth: "1000px",
-          margin: "30px auto",
-        }}
-      >
-        <h2>{analytics.userName}</h2>
-
-        <p style={{ marginTop: "5px" }}>
-          Career Path:{" "}
-          <strong>
-            {analytics.careerPath ||
-              "Not selected"}
-          </strong>
-        </p>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "18px",
-            marginTop: "25px",
-          }}
-        >
-          {/* Skills */}
-
-          <div className="dashboard-card">
-            <span className="card-icon">
-              🧠
-            </span>
-
-            <h3>Skills</h3>
-
-            <p
-              style={{
-                fontSize: "30px",
-                fontWeight: "700",
-                marginTop: "8px",
-              }}
-            >
-              {analytics.totalSkills}
-            </p>
-
-            <small>
-              Skills added
-            </small>
+            <strong>{Math.round(skillCompletion)}%</strong>
           </div>
 
-          {/* Projects */}
-
-          <div className="dashboard-card">
-            <span className="card-icon">
-              📁
-            </span>
-
-            <h3>Projects</h3>
-
-            <p
-              style={{
-                fontSize: "30px",
-                fontWeight: "700",
-                marginTop: "8px",
-              }}
-            >
-              {analytics.totalProjects}
-            </p>
-
-            <small>
-              Projects completed
-            </small>
-          </div>
-
-          {/* Certificates */}
-
-          <div className="dashboard-card">
-            <span className="card-icon">
-              🏆
-            </span>
-
-            <h3>Certificates</h3>
-
-            <p
-              style={{
-                fontSize: "30px",
-                fontWeight: "700",
-                marginTop: "8px",
-              }}
-            >
-              {analytics.totalCertificates}
-            </p>
-
-            <small>
-              Certificates earned
-            </small>
-          </div>
-
-          {/* Overall Progress */}
-
-          <div className="dashboard-card">
-            <span className="card-icon">
-              📈
-            </span>
-
-            <h3>Overall Progress</h3>
-
-            <p
-              style={{
-                fontSize: "30px",
-                fontWeight: "700",
-                marginTop: "8px",
-              }}
-            >
-              {analytics.overallProgress}%
-            </p>
-
-            <small>
-              Overall development
-            </small>
-          </div>
-        </div>
-      </section>
-
-      {/* Progress Breakdown */}
-
-      <section
-        className="dashboard-card"
-        style={{
-          maxWidth: "1000px",
-          margin: "30px auto",
-        }}
-      >
-        <h2>Progress Breakdown</h2>
-
-        <div
-          style={{
-            display: "grid",
-            gap: "24px",
-            marginTop: "25px",
-          }}
-        >
-          {/* Skills */}
-
-          <ProgressBar
-            title="Skills Progress"
-            value={analytics.skillProgress}
-          />
-
-          {/* Projects */}
-
-          <ProgressBar
-            title="Projects Progress"
-            value={analytics.projectProgress}
-          />
-
-          {/* Certificates */}
-
-          <ProgressBar
-            title="Certificate Progress"
-            value={
-              analytics.certificateProgress
-            }
-          />
-        </div>
-      </section>
-
-      {/* Skill Completion */}
-
-      <section
-        className="dashboard-card"
-        style={{
-          maxWidth: "1000px",
-          margin: "30px auto",
-        }}
-      >
-        <p className="eyebrow">
-          CAREER SKILLS
-        </p>
-
-        <h2>Skill Completion</h2>
-
-        <p style={{ marginTop: "10px" }}>
-          You have completed{" "}
-          <strong>
-            {analytics.completedRequiredSkills}
-          </strong>{" "}
-          out of{" "}
-          <strong>
-            {analytics.requiredSkillsCount}
-          </strong>{" "}
-          required career skills.
-        </p>
-
-        {analytics.requiredSkillsCount > 0 && (
           <div
-            style={{
-              marginTop: "20px",
-              height: "14px",
-              background: "#e5e7eb",
-              borderRadius: "10px",
-              overflow: "hidden",
-            }}
+            className="analytics-progress-track analytics-completion-track"
+            role="progressbar"
+            aria-valuenow={Math.round(skillCompletion)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Required skill completion"
           >
             <div
-              style={{
-                width: `${
-                  (analytics.completedRequiredSkills /
-                    analytics.requiredSkillsCount) *
-                  100
-                }%`,
-                height: "100%",
-                background: "#4f46e5",
-              }}
+              className="analytics-progress-fill fill-violet"
+              style={{ width: `${skillCompletion}%` }}
             />
           </div>
-        )}
-      </section>
 
-      {/* Readiness Breakdown */}
+          {requiredSkills === 0 && (
+            <p className="analytics-small-note">
+              No required skills are currently listed for this calculation.
+            </p>
+          )}
+        </div>
+      </section>
 
       {readiness?.breakdown && (
-        <section
-          className="dashboard-card"
-          style={{
-            maxWidth: "1000px",
-            margin: "30px auto",
-          }}
-        >
-          <p className="eyebrow">
-            SCORE DETAILS
-          </p>
-
-          <h2>
-            Readiness Breakdown
-          </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: "18px",
-              marginTop: "25px",
-            }}
-          >
-            <ScoreItem
-              title="Career Path"
-              score={
-                readiness.breakdown.careerPath
-              }
-              max={20}
-            />
-
-            <ScoreItem
-              title="Skills"
-              score={
-                readiness.breakdown.skills
-              }
-              max={25}
-            />
-
-            <ScoreItem
-              title="Projects"
-              score={
-                readiness.breakdown.projects
-              }
-              max={25}
-            />
-
-            <ScoreItem
-              title="Certificates"
-              score={
-                readiness.breakdown.certificates
-              }
-              max={15}
-            />
-
-            <ScoreItem
-              title="Advanced Skills"
-              score={
-                readiness.breakdown
-                  .advancedSkills
-              }
-              max={15}
-            />
+        <section className="analytics-section">
+          <div className="analytics-section-heading">
+            <div>
+              <span className="analytics-section-label">SCORE DETAILS</span>
+              <h2>Readiness breakdown</h2>
+              <p>See how each category contributes to your score.</p>
+            </div>
           </div>
+
+          <div className="analytics-score-grid">
+            {scoreItems.map((item) => (
+              <ScoreItem key={item.title} {...item} />
+            ))}
+          </div>
+
+          <p className="analytics-small-note">
+            Category maximums are shown separately. Your overall score
+            follows the value returned by the readiness API.
+          </p>
         </section>
       )}
     </main>
   );
 }
 
-/* Progress Bar */
+function clamp(value) {
+  const number = Number(value) || 0;
+  return Math.min(Math.max(number, 0), 100);
+}
 
-function ProgressBar({ title, value }) {
-  const safeValue = Math.min(
-    Math.max(value || 0, 0),
-    100
-  );
+function ProgressBar({ title, value, icon }) {
+  const safeValue = clamp(value);
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "8px",
-        }}
-      >
-        <strong>{title}</strong>
-
-        <span>{safeValue}%</span>
+    <div className="analytics-progress-item">
+      <div className="analytics-progress-heading">
+        <div className="analytics-progress-label">
+          <span>{icon}</span>
+          <strong>{title}</strong>
+        </div>
+        <strong>{safeValue}%</strong>
       </div>
 
       <div
-        style={{
-          height: "10px",
-          background: "#e5e7eb",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
+        className="analytics-progress-track"
+        role="progressbar"
+        aria-label={title}
+        aria-valuenow={safeValue}
+        aria-valuemin={0}
+        aria-valuemax={100}
       >
         <div
-          style={{
-            width: `${safeValue}%`,
-            height: "100%",
-            background: "#4f46e5",
-            borderRadius: "10px",
-          }}
+          className="analytics-progress-fill"
+          style={{ width: `${safeValue}%` }}
         />
       </div>
     </div>
   );
 }
 
-/* Score Item */
-
-function ScoreItem({ title, score, max }) {
-  const percentage =
-    max > 0 ? (score / max) * 100 : 0;
+function ScoreItem({ title, score, max, icon }) {
+  const numericScore = Number(score) || 0;
+  const percentage = max > 0
+    ? Math.min(Math.max((numericScore / max) * 100, 0), 100)
+    : 0;
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        border: "1px solid #e5e7eb",
-        borderRadius: "12px",
-      }}
-    >
+    <article className="analytics-score-card">
+      <div className="analytics-score-top">
+        <span className="analytics-score-icon">{icon}</span>
+        <span className="analytics-score-max">MAX {max}</span>
+      </div>
+
       <h3>{title}</h3>
+      <div className="analytics-score-number">
+        <strong>{numericScore}</strong>
+        <span> / {max}</span>
+      </div>
 
-      <p
-        style={{
-          fontSize: "25px",
-          fontWeight: "700",
-          margin: "8px 0",
-          color: "#4f46e5",
-        }}
-      >
-        {score}/{max}
-      </p>
-
-      <div
-        style={{
-          height: "8px",
-          background: "#e5e7eb",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
+      <div className="analytics-progress-track">
         <div
-          style={{
-            width: `${percentage}%`,
-            height: "100%",
-            background: "#4f46e5",
-          }}
+          className="analytics-progress-fill fill-violet"
+          style={{ width: `${percentage}%` }}
         />
       </div>
-    </div>
+    </article>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import "./styles.css";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -19,6 +20,7 @@ import GitHub from "./pages/GitHub";
 import ProjectRecommendations from "./pages/ProjectRecommendations";
 import Analytics from "./pages/Analytics";
 import PublicProfile from "./pages/PublicProfile";
+import PlacementLab from "./pages/PlacementLab";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
@@ -118,6 +120,13 @@ function App() {
           <Route
             path="/analytics"
             element={<Analytics />}
+          />
+
+          {/* ================= PLACEMENT PRACTICE LAB ================= */}
+
+          <Route
+            path="/placement-lab"
+            element={<PlacementLab />}
           />
         </Route>
 

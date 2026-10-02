@@ -1,349 +1,282 @@
+
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
+import "./Skills.css";
 
 export default function Skills() {
-const [skills, setSkills] = useState([]);
-const [skillName, setSkillName] = useState("");
-const [proficiency, setProficiency] = useState("Beginner");
+  const [skills, setSkills] = useState([]);
+  const [skillName, setSkillName] = useState("");
+  const [proficiency, setProficiency] = useState("Beginner");
 
-const [loading, setLoading] = useState(true);
-const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deletingIndex, setDeletingIndex] = useState(null);
 
-const [message, setMessage] = useState("");
-const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-useEffect(() => {
-loadSkills();
-}, []);
+  useEffect(() => {
+    loadSkills();
+  }, []);
 
-const loadSkills = async () => {
-try {
-const response = await api.get("/users/profile");
+  const loadSkills = async () => {
+    try {
+      const response = await api.get("/users/profile");
+      const userSkills = response.data?.user?.skills || [];
+      setSkills(userSkills);
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Unable to load skills."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const handleAddSkill = async (event) => {
+    event.preventDefault();
 
-  const userSkills = response.data?.user?.skills || [];
+    setMessage("");
+    setError("");
 
-  setSkills(userSkills);
-} catch (err) {
-  setError(
-    err.response?.data?.message ||
-      "Unable to load skills."
-  );
-} finally {
-  setLoading(false);
-}
+    const trimmedName = skillName.trim();
 
+    if (!trimmedName) {
+      setError("Please enter a skill name.");
+      return;
+    }
 
-};
+    const alreadyExists = skills.some(
+      (skill) =>
+        skill.name?.toLowerCase() === trimmedName.toLowerCase()
+    );
 
-const handleAddSkill = async (event) => {
-event.preventDefault();
+    if (alreadyExists) {
+      setError("This skill has already been added.");
+      return;
+    }
 
+    setSaving(true);
 
-setMessage("");
-setError("");
+    try {
+      const updatedSkills = [
+        ...skills,
+        { name: trimmedName, proficiency },
+      ];
 
-const trimmedName = skillName.trim();
+      const response = await api.put("/users/profile", {
+        skills: updatedSkills,
+      });
 
-if (!trimmedName) {
-  setError("Please enter a skill name.");
-  return;
-}
+      const savedSkills =
+        response.data?.user?.skills || updatedSkills;
 
-const alreadyExists = skills.some(
-  (skill) =>
-    skill.name?.toLowerCase() ===
-    trimmedName.toLowerCase()
-);
+      setSkills(savedSkills);
+      setSkillName("");
+      setProficiency("Beginner");
+      setMessage("Skill added successfully.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Unable to add skill."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
 
-if (alreadyExists) {
-  setError("This skill has already been added.");
-  return;
-}
+  const handleDeleteSkill = async (index) => {
+    setMessage("");
+    setError("");
+    setDeletingIndex(index);
 
-setSaving(true);
+    try {
+      const updatedSkills = skills.filter(
+        (_, skillIndex) => skillIndex !== index
+      );
 
-try {
-  const updatedSkills = [
-    ...skills,
-    {
-      name: trimmedName,
-      proficiency: proficiency,
-    },
-  ];
+      const response = await api.put("/users/profile", {
+        skills: updatedSkills,
+      });
 
-  const response = await api.put("/users/profile", {
-    skills: updatedSkills,
-  });
+      const savedSkills =
+        response.data?.user?.skills || updatedSkills;
 
-  const savedSkills =
-    response.data?.user?.skills || updatedSkills;
+      setSkills(savedSkills);
+      setMessage("Skill removed successfully.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Unable to remove skill."
+      );
+    } finally {
+      setDeletingIndex(null);
+    }
+  };
 
-  setSkills(savedSkills);
-  setSkillName("");
-  setProficiency("Beginner");
-  setMessage("Skill added successfully.");
-} catch (err) {
-  setError(
-    err.response?.data?.message ||
-      "Unable to add skill."
-  );
-} finally {
-  setSaving(false);
-}
+  const getProficiencyClass = (level) => {
+    if (level === "Advanced") return "skill-level-advanced";
+    if (level === "Intermediate") return "skill-level-intermediate";
+    return "skill-level-beginner";
+  };
 
+  if (loading) {
+    return (
+      <main className="skills-page">
+        <div className="skills-loading">
+          <div className="skills-spinner" />
+          <p>Loading your skills...</p>
+        </div>
+      </main>
+    );
+  }
 
-};
+  return (
+    <main className="skills-page">
+      <section className="skills-hero">
+        <div>
+          <span className="skills-eyebrow">YOUR DEVELOPMENT</span>
+          <h1>My Skills</h1>
+          <p>
+            Build your professional profile, track your proficiency,
+            and keep growing one skill at a time.
+          </p>
+        </div>
 
-const handleDeleteSkill = async (index) => {
-setMessage("");
-setError("");
+        <div className="skills-hero-icon" aria-hidden="true">
+          <span>✦</span>
+        </div>
+      </section>
 
+      <section className="skills-summary">
+        <div className="skills-summary-icon">✧</div>
+        <div>
+          <span>Total skills</span>
+          <strong>{skills.length}</strong>
+        </div>
+        <p>Your skills, all in one place.</p>
+      </section>
 
-try {
-  const updatedSkills = skills.filter(
-    (_, skillIndex) => skillIndex !== index
-  );
-
-  const response = await api.put("/users/profile", {
-    skills: updatedSkills,
-  });
-
-  const savedSkills =
-    response.data?.user?.skills || updatedSkills;
-
-  setSkills(savedSkills);
-  setMessage("Skill removed successfully.");
-} catch (err) {
-  setError(
-    err.response?.data?.message ||
-      "Unable to remove skill."
-  );
-}
-
-
-};
-
-if (loading) {
-return ( <main className="page"> <p>Loading skills...</p> </main>
-);
-}
-
-return ( <main className="page"> <section className="dashboard-header"> <div> <p className="eyebrow">SKILL MANAGEMENT</p>
-
-
-      <h1>Your Skills</h1>
-
-      <p>
-        Add your technical and professional skills
-        and track your proficiency level.
-      </p>
-    </div>
-  </section>
-
-  <section
-    className="dashboard-card"
-    style={{
-      maxWidth: "850px",
-      marginBottom: "25px",
-    }}
-  >
-    <h2>Add a Skill</h2>
-
-    <form
-      onSubmit={handleAddSkill}
-      style={{
-        marginTop: "25px",
-      }}
-    >
-      <label>Skill Name</label>
-
-      <input
-        type="text"
-        placeholder="e.g. React.js"
-        value={skillName}
-        onChange={(event) =>
-          setSkillName(event.target.value)
-        }
-        style={{
-          width: "100%",
-          padding: "13px",
-          marginTop: "7px",
-          marginBottom: "18px",
-          border: "1px solid #d1d5db",
-          borderRadius: "8px",
-          outline: "none",
-        }}
-      />
-
-      <label>Proficiency</label>
-
-      <select
-        value={proficiency}
-        onChange={(event) =>
-          setProficiency(event.target.value)
-        }
-        style={{
-          width: "100%",
-          padding: "13px",
-          marginTop: "7px",
-          marginBottom: "20px",
-          border: "1px solid #d1d5db",
-          borderRadius: "8px",
-          background: "white",
-          outline: "none",
-        }}
-      >
-        <option value="Beginner">
-          Beginner
-        </option>
-
-        <option value="Intermediate">
-          Intermediate
-        </option>
-
-        <option value="Advanced">
-          Advanced
-        </option>
-      </select>
-
-      {message && (
-        <p
-          style={{
-            color: "#16a34a",
-            marginBottom: "15px",
-            fontWeight: "600",
-          }}
-        >
-          {message}
-        </p>
-      )}
-
-      {error && (
-        <p
-          style={{
-            color: "#dc2626",
-            marginBottom: "15px",
-            fontWeight: "600",
-          }}
-        >
-          {error}
-        </p>
-      )}
-
-      <button type="submit" disabled={saving}>
-        {saving ? "Adding..." : "Add Skill"}
-      </button>
-    </form>
-  </section>
-
-  <section
-    className="dashboard-card"
-    style={{
-      maxWidth: "850px",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-        gap: "15px",
-        flexWrap: "wrap",
-      }}
-    >
-      <div>
-        <h2>Your Skill Set</h2>
-
-        <p style={{ marginTop: "5px" }}>
-          {skills.length} skill
-          {skills.length === 1 ? "" : "s"} added
-        </p>
-      </div>
-    </div>
-
-    {skills.length === 0 ? (
-      <div
-        style={{
-          padding: "30px",
-          textAlign: "center",
-          background: "#f8fafc",
-          borderRadius: "10px",
-          border: "1px dashed #cbd5e1",
-        }}
-      >
-        <h3>No skills added yet</h3>
-
-        <p>
-          Add your first skill above to start
-          building your career profile.
-        </p>
-      </div>
-    ) : (
-      <div
-        style={{
-          display: "grid",
-          gap: "12px",
-        }}
-      >
-        {skills.map((skill, index) => (
-          <div
-            key={`${skill.name}-${index}`}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "15px",
-              padding: "18px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "10px",
-              background: "white",
-              flexWrap: "wrap",
-            }}
-          >
+      <div className="skills-content-grid">
+        <section className="skills-panel skills-add-panel">
+          <div className="skills-panel-heading">
+            <div className="skills-panel-icon">＋</div>
             <div>
-              <h3 style={{ marginBottom: "6px" }}>
-                {skill.name}
-              </h3>
+              <h2>Add a skill</h2>
+              <p>What have you learned recently?</p>
+            </div>
+          </div>
 
-              <span
-                style={{
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  color:
-                    skill.proficiency === "Advanced"
-                      ? "#15803d"
-                      : skill.proficiency ===
-                        "Intermediate"
-                      ? "#2563eb"
-                      : "#64748b",
-                }}
-              >
-                {skill.proficiency}
-              </span>
+          <form onSubmit={handleAddSkill} className="skills-form">
+            <div className="skills-field">
+              <label htmlFor="skill-name">Skill name</label>
+              <input
+                id="skill-name"
+                type="text"
+                placeholder="e.g. React.js, C++, SQL"
+                value={skillName}
+                onChange={(event) => setSkillName(event.target.value)}
+                required
+              />
             </div>
 
+            <div className="skills-field">
+              <label htmlFor="skill-proficiency">Proficiency level</label>
+              <select
+                id="skill-proficiency"
+                value={proficiency}
+                onChange={(event) => setProficiency(event.target.value)}
+              >
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+
+            {message && (
+              <div className="skills-message" role="status">
+                {message}
+              </div>
+            )}
+
+            {error && (
+              <div className="skills-error" role="alert">
+                {error}
+              </div>
+            )}
+
             <button
-              type="button"
-              onClick={() =>
-                handleDeleteSkill(index)
-              }
-              style={{
-                background: "#fee2e2",
-                color: "#b91c1c",
-                padding: "9px 14px",
-              }}
+              className="skills-submit"
+              type="submit"
+              disabled={saving}
             >
-              Remove
+              {saving ? "Adding skill..." : "＋ Add skill"}
             </button>
+          </form>
+
+          <div className="skills-tip">
+            <span>✦</span>
+            <p>
+              <strong>Keep learning!</strong>
+              Update your skills as you gain experience.
+            </p>
           </div>
-        ))}
+        </section>
+
+        <section className="skills-panel skills-list-panel">
+          <div className="skills-list-heading">
+            <div>
+              <h2>Your skill set</h2>
+              <p>Manage your current skills and proficiency.</p>
+            </div>
+            <span className="skills-count">{skills.length}</span>
+          </div>
+
+          {skills.length === 0 ? (
+            <div className="skills-empty">
+              <div className="skills-empty-icon">✧</div>
+              <h3>Your journey starts here</h3>
+              <p>
+                You haven't added any skills yet. Add your first skill
+                using the form to build your profile.
+              </p>
+            </div>
+          ) : (
+            <div className="skills-list">
+              {skills.map((skill, index) => (
+                <article
+                  className="skill-item"
+                  key={`${skill.name}-${index}`}
+                >
+                  <div className="skill-item-icon">
+                    {skill.name?.trim()?.charAt(0)?.toUpperCase() || "S"}
+                  </div>
+
+                  <div className="skill-item-info">
+                    <h3>{skill.name}</h3>
+                    <span
+                      className={`skill-level ${getProficiencyClass(
+                        skill.proficiency
+                      )}`}
+                    >
+                      <span className="skill-level-dot" />
+                      {skill.proficiency || "Beginner"}
+                    </span>
+                  </div>
+
+                  <button
+                    className="skill-remove"
+                    type="button"
+                    onClick={() => handleDeleteSkill(index)}
+                    disabled={deletingIndex !== null}
+                    aria-label={`Remove ${skill.name}`}
+                  >
+                    {deletingIndex === index ? "Removing..." : "Remove"}
+                  </button>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
-    )}
-  </section>
-</main>
-
-
-);
+    </main>
+  );
 }

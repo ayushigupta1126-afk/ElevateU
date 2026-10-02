@@ -1,0 +1,376 @@
+
+.project-count {
+  min-width: 130px;
+  padding: 18px 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  display: grid;
+  gap: 8px;
+}
+
+.project-count span,
+.project-list-heading > div > p:last-child {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.project-count strong {
+  color: #4f46e5;
+  font-size: 30px;
+}
+
+.project-form-card {
+  margin-top: 24px;
+}
+
+.project-section-heading,
+.project-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.project-section-heading h2,
+.project-list-heading h2 {
+  margin: 5px 0;
+  color: #172033;
+}
+
+.project-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.project-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.project-field-full {
+  grid-column: 1 / -1;
+}
+
+.project-field label {
+  color: #273449;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.project-field input,
+.project-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px 14px;
+  color: #172033;
+  background: #fff;
+  border: 1px solid #dbe1ea;
+  border-radius: 10px;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.project-field textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.project-field input:focus,
+.project-field textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px #6366f11c;
+}
+
+.project-field small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.project-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.project-primary-button,
+.project-secondary-button,
+.project-edit-button,
+.project-delete-button {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 16px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+
+.project-primary-button {
+  color: #fff;
+  background: #4f46e5;
+}
+
+.project-secondary-button {
+  color: #334155;
+  background: #eef2f7;
+}
+
+.project-edit-button {
+  color: #4338ca;
+  background: #eef2ff;
+}
+
+.project-delete-button {
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.project-primary-button:hover,
+.project-secondary-button:hover,
+.project-edit-button:hover,
+.project-delete-button:hover {
+  transform: translateY(-1px);
+}
+
+.project-primary-button:disabled,
+.project-secondary-button:disabled,
+.project-delete-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.project-edit-hint {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.project-alert {
+  padding: 12px 14px;
+  margin-top: 18px;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+.project-success {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.project-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.projects-section {
+  margin-top: 38px;
+}
+
+.project-list-heading {
+  align-items: flex-end;
+}
+
+.project-list-heading > div > p:last-child {
+  margin-top: 7px;
+}
+
+.project-search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(100%, 350px);
+  padding: 0 12px;
+  border: 1px solid #dbe1ea;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.project-search span {
+  color: #64748b;
+  font-size: 23px;
+}
+
+.project-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+
+.project-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 18px #17203308;
+}
+
+.project-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.project-card-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+.project-status {
+  padding: 6px 9px;
+  color: #475569;
+  background: #f1f5f9;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+.project-card h3 {
+  margin: 0 0 10px;
+  color: #172033;
+  font-size: 19px;
+  overflow-wrap: anywhere;
+}
+
+.project-description {
+  color: #64748b;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.project-tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.project-tech-list span {
+  padding: 6px 9px;
+  color: #4338ca;
+  background: #eef2ff;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.project-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 17px;
+  padding-top: 18px;
+  margin-top: 20px;
+  border-top: 1px solid #edf0f5;
+}
+
+.project-github-link {
+  color: #4f46e5;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.project-github-link:hover {
+  text-decoration: underline;
+}
+
+.project-no-link {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.project-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.project-empty-state {
+  padding: 44px 22px;
+  text-align: center;
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+}
+
+.project-empty-state h3 {
+  margin: 10px 0;
+  color: #172033;
+}
+
+.project-empty-state p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.project-empty-icon {
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 14px;
+  font-size: 26px;
+}
+
+@media (max-width: 760px) {
+  .project-section-heading,
+  .project-list-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .project-search {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .project-form-grid,
+  .project-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-field-full {
+    grid-column: auto;
+  }
+
+  .project-count {
+    width: fit-content;
+  }
+
+  .project-card {
+    padding: 18px;
+  }
+}

@@ -1,34 +1,30 @@
+
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
     setLoading(true);
 
     try {
-      const response = await api.post(
-        "/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/auth/login", {
+        email: email.trim(),
+        password,
+      });
 
       const user = response.data.user;
       const token = response.data.token;
@@ -40,10 +36,10 @@ export default function Login() {
       } else {
         navigate("/dashboard");
       }
-    } catch (error) {
+    } catch (err) {
       setError(
-        error.response?.data?.message ||
-          "Login failed. Please try again."
+        err.response?.data?.message ||
+          "Login failed. Please check your details and try again."
       );
     } finally {
       setLoading(false);
@@ -51,72 +47,139 @@ export default function Login() {
   };
 
   return (
-    <main className="page auth-page">
-      <div className="auth-card">
-        <p className="eyebrow">
-          ELEVATEU ACCOUNT
-        </p>
+    <main className="page login-page">
+      <div className="login-shell">
+        <section className="login-welcome">
+          <div className="login-brand">
+            <span className="login-brand-icon">E</span>
+            <span>ElevateU</span>
+          </div>
 
-        <h1>Welcome Back</h1>
+          <div className="login-welcome-content">
+            <span className="login-pill">
+              YOUR CAREER. YOUR FUTURE.
+            </span>
 
-        <p className="auth-subtitle">
-          Login to continue your career development journey.
-        </p>
+            <h1>
+              Small steps.
+              <br />
+              <span>Big achievements.</span>
+            </h1>
 
-        {error && (
-          <p
-            style={{
-              color: "#dc2626",
-              marginBottom: "18px",
-              fontSize: "14px",
-            }}
-          >
-            {error}
+            <p>
+              Build your skills, track your progress and
+              bring your career goals closer — one step at a time.
+            </p>
+
+            <div className="login-feature-list">
+              <div>
+                <span className="login-feature-check">✓</span>
+                <span>Track your skills and learning roadmap</span>
+              </div>
+              <div>
+                <span className="login-feature-check">✓</span>
+                <span>Showcase projects and certificates</span>
+              </div>
+              <div>
+                <span className="login-feature-check">✓</span>
+                <span>Keep your career journey organized</span>
+              </div>
+            </div>
+          </div>
+
+          <p className="login-side-footer">
+            Made for your next big step.
           </p>
-        )}
+        </section>
 
-        <form onSubmit={handleSubmit}>
-          <label>Email</label>
+        <section className="login-form-panel">
+          <div className="login-form-inner">
+            <div className="login-mobile-brand">
+              <span className="login-brand-icon">E</span>
+              <span>ElevateU</span>
+            </div>
 
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            required
-          />
+            <div className="login-heading">
+              <span className="login-heading-icon">✦</span>
+              <p className="eyebrow">WELCOME BACK</p>
+              <h2>Login to your account</h2>
+              <p>
+                Continue where you left off.
+              </p>
+            </div>
 
-          <label>Password</label>
+            {error && (
+              <div className="login-error" role="alert">
+                <span>!</span>
+                <p>{error}</p>
+              </div>
+            )}
 
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-            required
-          />
+            <form className="login-form" onSubmit={handleSubmit}>
+              <div className="login-field">
+                <label htmlFor="login-email">Email address</label>
+                <input
+                  id="login-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <button
-            type="submit"
-            className="full-btn"
-            disabled={loading}
-          >
-            {loading
-              ? "Logging in..."
-              : "Login"}
-          </button>
-        </form>
+              <div className="login-field">
+                <div className="login-password-label">
+                  <label htmlFor="login-password">Password</label>
+                </div>
 
-        <p className="auth-footer">
-          Don't have an account?{" "}
-          <Link to="/signup">
-            Create an account
-          </Link>
-        </p>
+                <div className="login-password-wrap">
+                  <input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    className="login-show-password"
+                    onClick={() => setShowPassword((value) => !value)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="login-submit"
+                disabled={loading}
+              >
+                {loading ? "Signing you in..." : "Login to ElevateU"}
+                {!loading && <span aria-hidden="true">→</span>}
+              </button>
+            </form>
+
+            <div className="login-divider">
+              <span>YOUR JOURNEY CONTINUES HERE</span>
+            </div>
+
+            <p className="login-signup">
+              New to ElevateU?{" "}
+              <Link to="/signup">Create an account →</Link>
+            </p>
+
+            <p className="login-privacy-note">
+              Your next chapter starts with one step.
+            </p>
+          </div>
+        </section>
       </div>
     </main>
   );

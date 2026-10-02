@@ -17,6 +17,8 @@ const githubRoutes = require("./routes/githubRoutes");
 const projectRecommendationRoutes = require("./routes/projectRecommendationRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const readinessRoutes = require("./routes/readinessRoutes");
+const placementRoutes = require("./routes/placementRoutes");
+const codingRoutes = require("./routes/codingRoutes");
 
 dotenv.config();
 
@@ -24,15 +26,21 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
   "https://elevateu-frontend-ayushi.onrender.com",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("CORS REQUEST ORIGIN:", origin);
+
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log("BLOCKED CORS ORIGIN:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -73,6 +81,16 @@ app.use(
 app.use(
   "/api/readiness",
   readinessRoutes
+);
+
+app.use(
+  "/api/placement",
+  placementRoutes
+);
+
+app.use(
+  "/api/coding",
+  codingRoutes
 );
 
 const PORT = process.env.PORT || 5000;

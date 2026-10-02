@@ -1,0 +1,1119 @@
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+.rb-page {
+  --rb-purple: #7654e8;
+  --rb-purple-dark: #5b3bc4;
+  --rb-purple-light: #f1edff;
+  --rb-ink: #201b35;
+  --rb-muted: #77738b;
+  --rb-border: #eae7f3;
+  --rb-surface: #ffffff;
+  --rb-bg: #f8f7fc;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 34px clamp(16px, 3vw, 42px) 60px;
+  color: var(--rb-ink);
+  background: var(--rb-bg);
+  font-family: "DM Sans", sans-serif;
+  min-height: 100vh;
+}
+
+.rb-page *,
+.rb-page *::before,
+.rb-page *::after {
+  box-sizing: border-box;
+}
+
+.rb-page button,
+.rb-page input,
+.rb-page textarea {
+  font: inherit;
+}
+
+.rb-page button {
+  cursor: pointer;
+}
+
+.rb-page button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.rb-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 26px;
+}
+
+.rb-hero-copy {
+  max-width: 720px;
+}
+
+.rb-eyebrow,
+.rb-small-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--rb-purple);
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  font-weight: 800;
+}
+
+.rb-eyebrow {
+  margin-bottom: 14px;
+}
+
+.rb-eyebrow-dot,
+.rb-live-badge > span {
+  width: 8px;
+  height: 8px;
+  background: #8b6cf3;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #eee8ff;
+}
+
+.rb-hero h1 {
+  font: 800 clamp(28px, 3vw, 43px)/1.18 "Manrope", sans-serif;
+  letter-spacing: -1.8px;
+  margin: 0;
+}
+
+.rb-hero h1 span {
+  color: var(--rb-purple);
+}
+
+.rb-hero-copy > p {
+  margin: 13px 0 0;
+  color: var(--rb-muted);
+  line-height: 1.75;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+.rb-hero-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rb-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.rb-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.rb-button-primary {
+  background: linear-gradient(135deg, #8968f6, #6545d5);
+  color: white;
+  box-shadow: 0 7px 18px #7654e82b;
+}
+
+.rb-button-primary:hover:not(:disabled) {
+  box-shadow: 0 10px 25px #7654e83d;
+}
+
+.rb-button-secondary {
+  color: var(--rb-ink);
+  background: white;
+  border-color: var(--rb-border);
+}
+
+.rb-progress-card {
+  background: linear-gradient(110deg, #fff, #f7f3ff);
+  border: 1px solid #eae4fb;
+  border-radius: 20px;
+  padding: 22px 25px 19px;
+  margin-bottom: 24px;
+  box-shadow: 0 5px 22px #30205b05;
+}
+
+.rb-progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.rb-progress-top h2 {
+  font: 800 24px "Manrope", sans-serif;
+  margin: 8px 0 5px;
+  letter-spacing: -0.8px;
+}
+
+.rb-progress-top p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--rb-muted);
+}
+
+.rb-progress-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(
+    var(--rb-purple) var(--rb-progress),
+    #e9e3fb 0
+  );
+  flex-shrink: 0;
+}
+
+.rb-progress-ring > div {
+  display: grid;
+  place-items: center;
+  background: white;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.rb-progress-track {
+  height: 6px;
+  margin-top: 20px;
+  background: #eae5f8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.rb-progress-track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a28aff, #704de0);
+  transition: width 0.3s ease;
+}
+
+.rb-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 15px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.rb-alert > span {
+  font-weight: 800;
+}
+
+.rb-alert button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  font-size: 19px;
+  color: inherit;
+}
+
+.rb-alert-error {
+  color: #a62d45;
+  background: #fff0f2;
+  border: 1px solid #ffd9df;
+}
+
+.rb-alert-success {
+  color: #167448;
+  background: #edfff5;
+  border: 1px solid #c8f4dc;
+}
+
+.rb-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  align-items: start;
+  gap: 25px;
+}
+
+.rb-editor,
+.rb-preview-column {
+  min-width: 0;
+}
+
+.rb-editor {
+  background: var(--rb-surface);
+  border: 1px solid var(--rb-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 7px 28px #2c1b5107;
+}
+
+.rb-panel-heading {
+  padding: 23px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--rb-border);
+}
+
+.rb-panel-heading h2,
+.rb-preview-toolbar h2 {
+  margin: 7px 0 0;
+  font: 800 21px "Manrope", sans-serif;
+  letter-spacing: -0.7px;
+}
+
+.rb-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  background: #f1fff7;
+  color: #238052;
+  border: 1px solid #d5f5e2;
+  border-radius: 30px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rb-live-badge > span {
+  width: 6px;
+  height: 6px;
+  background: #37b77a;
+  box-shadow: none;
+}
+
+.rb-section-nav {
+  padding: 14px 17px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--rb-border);
+  background: #fdfcff;
+}
+
+.rb-section-nav button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 10px;
+  background: transparent;
+  color: #77738b;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.rb-section-nav button > span {
+  color: #a09ab4;
+  font-size: 9px;
+}
+
+.rb-section-nav button.active {
+  background: var(--rb-purple-light);
+  color: var(--rb-purple-dark);
+  border-color: #e4dcff;
+}
+
+.rb-section-nav button.active > span {
+  color: var(--rb-purple);
+}
+
+.rb-form-section {
+  padding: 25px 24px 28px;
+  min-height: 400px;
+  animation: rb-appear 0.22s ease;
+}
+
+@keyframes rb-appear {
+  from {
+    opacity: 0.55;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rb-section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 25px;
+}
+
+.rb-section-number {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 37px;
+  height: 37px;
+  border-radius: 12px;
+  background: var(--rb-purple-light);
+  color: var(--rb-purple);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.rb-section-title h3 {
+  margin: 2px 0 5px;
+  font: 800 16px "Manrope", sans-serif;
+  letter-spacing: -0.3px;
+}
+
+.rb-section-title p {
+  color: var(--rb-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.rb-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px 14px;
+}
+
+.rb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 17px;
+}
+
+.rb-form-grid > .rb-field,
+.rb-form-grid > .rb-field-full {
+  margin-bottom: 0;
+}
+
+.rb-field > span {
+  color: #49445f;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.rb-field input,
+.rb-field textarea {
+  width: 100%;
+  min-width: 0;
+  color: var(--rb-ink);
+  background: #fcfbfe;
+  border: 1px solid #e8e4f0;
+  border-radius: 10px;
+  padding: 12px 13px;
+  outline: none;
+  font-size: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.rb-field input {
+  height: 43px;
+}
+
+.rb-field textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.65;
+}
+
+.rb-field input::placeholder,
+.rb-field textarea::placeholder {
+  color: #aaa5b8;
+}
+
+.rb-field input:focus,
+.rb-field textarea:focus {
+  border-color: #9b82f1;
+  background: white;
+  box-shadow: 0 0 0 3px #7654e814;
+}
+
+.rb-field small {
+  text-align: right;
+  color: #928ca4;
+  font-size: 10px;
+}
+
+.rb-field-full {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.rb-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 18px;
+  padding: 14px;
+  background: #f7f4ff;
+  border: 1px solid #ece5ff;
+  border-radius: 12px;
+}
+
+.rb-tip > span {
+  color: var(--rb-purple);
+  font-size: 17px;
+}
+
+.rb-tip p {
+  color: #69617e;
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.rb-repeat-card {
+  border: 1px solid #eae6f2;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: #fdfcff;
+}
+
+.rb-repeat-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.rb-repeat-heading strong {
+  font-size: 12px;
+}
+
+.rb-remove-button {
+  border: 0;
+  background: #fff0f2;
+  color: #b3445a;
+  border-radius: 7px;
+  padding: 7px 9px;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+.rb-add-button {
+  width: 100%;
+  min-height: 43px;
+  background: #faf8ff;
+  color: var(--rb-purple-dark);
+  border: 1px dashed #c9baf8;
+  border-radius: 10px;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  transition: background 0.2s;
+}
+
+.rb-add-button:hover {
+  background: #f0eaff;
+}
+
+.rb-editor-footer {
+  padding: 17px 23px;
+  border-top: 1px solid var(--rb-border);
+  background: #fdfcff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.rb-editor-footer > span {
+  color: var(--rb-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.rb-preview-column {
+  position: sticky;
+  top: 20px;
+}
+
+.rb-preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 3px 0 17px;
+}
+
+.rb-preview-toolbar h2 {
+  font-size: 20px;
+}
+
+.rb-a4-badge {
+  border: 1px solid #e7e2f0;
+  border-radius: 7px;
+  background: white;
+  color: #817b96;
+  padding: 7px 9px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+}
+
+.rb-template-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 15px;
+}
+
+.rb-template-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid #e7e2f0;
+  border-radius: 12px;
+  background: white;
+  text-align: left;
+  min-width: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rb-template-option.selected {
+  border-color: #9276ed;
+  box-shadow: 0 0 0 2px #7654e812;
+  background: #fdfbff;
+}
+
+.rb-template-option > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rb-template-option strong {
+  color: var(--rb-ink);
+  font-size: 10px;
+}
+
+.rb-template-option small {
+  color: #8b859d;
+  font-size: 9px;
+}
+
+.rb-template-check {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: var(--rb-purple);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.rb-template-swatch {
+  width: 35px;
+  height: 43px;
+  border: 1px solid #e8e4ef;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.rb-template-swatch i {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #d9d4e7;
+}
+
+.rb-template-swatch i:first-child {
+  width: 60%;
+  height: 4px;
+  background: #7956dc;
+}
+
+.rb-template-swatch.classic i:first-child {
+  background: #28243a;
+}
+
+.rb-template-swatch.minimal i:first-child {
+  background: #d0cbd8;
+}
+
+.rb-template-swatch.executive i:first-child {
+  background: #28243a;
+  height: 6px;
+}
+
+.rb-paper {
+  --rb-resume-accent: #7654e8;
+  width: 100%;
+  min-height: 842px;
+  padding: 37px 34px 24px;
+  position: relative;
+  background: #fff;
+  border: 1px solid #e8e3f0;
+  border-radius: 5px;
+  box-shadow: 0 14px 35px #2a204010;
+  color: #292637;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.rb-template-classic {
+  --rb-resume-accent: #343047;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.rb-template-minimal {
+  --rb-resume-accent: #817a90;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rb-template-executive {
+  --rb-resume-accent: #27213c;
+  font-family: "Manrope", Arial, sans-serif;
+}
+
+.rb-resume-header {
+  padding-bottom: 21px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--rb-resume-accent);
+}
+
+.rb-resume-heading h1 {
+  margin: 0;
+  font-size: clamp(22px, 2.3vw, 29px);
+  line-height: 1.2;
+  letter-spacing: -0.6px;
+  font-weight: 800;
+  color: #252037;
+}
+
+.rb-resume-role {
+  margin: 7px 0 0 !important;
+  color: var(--rb-resume-accent) !important;
+  font-size: 12px !important;
+  font-weight: 700;
+}
+
+.rb-resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 13px;
+  margin-top: 15px;
+  color: #696478;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.rb-resume-section {
+  margin-bottom: 21px;
+  break-inside: auto;
+}
+
+.rb-resume-section h2 {
+  margin: 0 0 11px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e7e2ee;
+  color: var(--rb-resume-accent);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.rb-template-classic .rb-resume-section h2 {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+}
+
+.rb-template-minimal .rb-resume-header {
+  border-bottom-width: 1px;
+}
+
+.rb-template-executive .rb-resume-header {
+  padding: 20px;
+  margin: -10px -10px 21px;
+  background: #f5f2fc;
+  border-bottom: 3px solid var(--rb-resume-accent);
+}
+
+.rb-resume-section p {
+  margin: 4px 0;
+  font-size: 10px;
+  line-height: 1.65;
+  color: #585366;
+}
+
+.rb-resume-body {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.rb-resume-entry {
+  margin-bottom: 13px;
+  break-inside: avoid;
+}
+
+.rb-resume-entry:last-child {
+  margin-bottom: 0;
+}
+
+.rb-resume-entry > strong {
+  color: #302b40;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.rb-resume-entry-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rb-resume-entry-top strong {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #302b40;
+}
+
+.rb-resume-entry-top > span {
+  flex-shrink: 0;
+  color: #777187;
+  font-size: 9px;
+}
+
+.rb-resume-muted {
+  color: #817a90 !important;
+  font-size: 9px !important;
+}
+
+.rb-resume-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-top: 1px solid #ece8f2;
+  padding-top: 10px;
+  margin-top: 25px;
+  color: #918b9f;
+  font-size: 8px;
+}
+
+.rb-resume-empty {
+  padding: 25px 15px;
+  text-align: center;
+  border: 1px dashed #dcd4ee;
+  border-radius: 8px;
+  background: #fbfaff;
+}
+
+.rb-resume-empty > span {
+  color: var(--rb-purple);
+  font-size: 22px;
+}
+
+.rb-resume-empty h3 {
+  font-size: 14px;
+  margin: 9px 0;
+}
+
+.rb-resume-empty p {
+  color: #807990;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.rb-preview-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 13px 2px;
+  color: #77718b;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.rb-preview-note > span {
+  color: var(--rb-purple);
+}
+
+.rb-preview-note p {
+  margin: 0;
+}
+
+.rb-state-card {
+  max-width: 480px;
+  margin: 70px auto;
+  padding: 36px;
+  text-align: center;
+  background: white;
+  border: 1px solid var(--rb-border);
+  border-radius: 20px;
+  box-shadow: 0 12px 35px #2a20400b;
+}
+
+.rb-state-card h2 {
+  font: 800 21px "Manrope", sans-serif;
+}
+
+.rb-state-card p {
+  color: var(--rb-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.rb-state-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: auto;
+  border-radius: 50%;
+  color: #bd3852;
+  background: #fff0f2;
+  font-weight: 800;
+}
+
+.rb-spinner {
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 18px;
+  border: 3px solid #eae4fb;
+  border-top-color: var(--rb-purple);
+  border-radius: 50%;
+  animation: rb-spin 0.8s linear infinite;
+}
+
+@keyframes rb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1100px) {
+  .rb-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rb-preview-column {
+    position: static;
+  }
+
+  .rb-paper {
+    max-width: 760px;
+    margin: 0 auto;
+    min-height: 842px;
+  }
+}
+
+@media (max-width: 650px) {
+  .rb-page {
+    padding: 22px 12px 38px;
+  }
+
+  .rb-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .rb-hero h1 {
+    font-size: 30px;
+    letter-spacing: -1.2px;
+  }
+
+  .rb-hero-actions {
+    width: 100%;
+  }
+
+  .rb-hero-actions .rb-button {
+    flex: 1;
+  }
+
+  .rb-progress-card {
+    padding: 18px;
+  }
+
+  .rb-panel-heading {
+    padding: 19px 16px;
+    align-items: flex-start;
+  }
+
+  .rb-panel-heading h2 {
+    font-size: 18px;
+  }
+
+  .rb-live-badge {
+    font-size: 9px;
+    padding: 7px;
+  }
+
+  .rb-section-nav {
+    padding: 11px;
+    gap: 5px;
+  }
+
+  .rb-section-nav button {
+    padding: 8px;
+    font-size: 9px;
+  }
+
+  .rb-form-section {
+    padding: 21px 16px;
+  }
+
+  .rb-form-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .rb-field-full {
+    grid-column: auto;
+  }
+
+  .rb-editor-footer {
+    padding: 15px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rb-editor-footer .rb-button {
+    width: 100%;
+  }
+
+  .rb-template-picker {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rb-paper {
+    padding: 27px 20px;
+    min-height: 600px;
+  }
+
+  .rb-resume-heading h1 {
+    font-size: 24px;
+  }
+
+  .rb-resume-entry-top {
+    flex-wrap: wrap;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body,
+  #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    background: white !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .rb-page,
+  .rb-page * {
+    visibility: visible !important;
+  }
+
+  .rb-page {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  .rb-editor-only,
+  .rb-hero,
+  .rb-progress-card,
+  .rb-alert,
+  .rb-editor,
+  .rb-preview-toolbar,
+  .rb-template-picker,
+  .rb-preview-note,
+  .rb-resume-empty {
+    display: none !important;
+  }
+
+  .rb-workspace {
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  .rb-preview-column {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .rb-paper {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    color: #222 !important;
+    background: white !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .rb-resume-header,
+  .rb-resume-section,
+  .rb-resume-entry,
+  .rb-resume-footer {
+    break-inside: avoid;
+  }
+
+  .rb-resume-section h2,
+  .rb-resume-heading h1,
+  .rb-resume-role,
+  .rb-resume-entry-top strong,
+  .rb-resume-entry > strong {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .rb-resume-section p {
+    orphans: 3;
+    widows: 3;
+  }
+}

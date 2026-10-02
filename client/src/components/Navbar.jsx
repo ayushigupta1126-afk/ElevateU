@@ -37,47 +37,29 @@ export default function Navbar() {
               Login
             </Link>
 
-            <Link
-              to="/signup"
-              className="nav-signup"
-            >
+            <Link to="/signup" className="nav-signup">
               Get Started
             </Link>
           </>
         ) : (
           <>
-            <Link
-              to="/dashboard"
-              className="nav-item"
-            >
+            <Link to="/dashboard" className="nav-item">
               Dashboard
             </Link>
 
-            <Link
-              to="/career-path"
-              className="nav-item"
-            >
+            <Link to="/career-path" className="nav-item">
               Career
             </Link>
 
-            <Link
-              to="/ai-assistant"
-              className="nav-item"
-            >
+            <Link to="/ai-assistant" className="nav-item">
               AI Assistant
             </Link>
 
-            <Link
-              to="/resume-builder"
-              className="nav-item"
-            >
+            <Link to="/resume-builder" className="nav-item">
               Resume
             </Link>
 
-            <Link
-              to="/github"
-              className="nav-item"
-            >
+            <Link to="/github" className="nav-item">
               GitHub
             </Link>
 
@@ -156,6 +138,13 @@ export default function Navbar() {
                     onClick={closeExplore}
                   >
                     📈 Analytics
+                  </Link>
+
+                  <Link
+                    to="/placement-lab"
+                    onClick={closeExplore}
+                  >
+                    🎯 Placement Lab
                   </Link>
 
                   {user?.role === "admin" && (

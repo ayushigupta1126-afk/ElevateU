@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import api from "../services/api";
+import "./ProjectRecommendations.css";
 
 export default function ProjectRecommendations() {
   const [careerPath, setCareerPath] = useState("");
@@ -14,9 +16,11 @@ export default function ProjectRecommendations() {
           "/project-recommendations/recommendations"
         );
 
-        setCareerPath(response.data.careerPath);
+        setCareerPath(response.data.careerPath || "");
         setRecommendations(
-          response.data.recommendations || []
+          Array.isArray(response.data.recommendations)
+            ? response.data.recommendations
+            : []
         );
       } catch (err) {
         setError(
@@ -31,198 +35,291 @@ export default function ProjectRecommendations() {
     fetchRecommendations();
   }, []);
 
+  const getDifficultyClass = (difficulty) => {
+    const value = (difficulty || "").toLowerCase();
+
+    if (value.includes("beginner")) return "difficulty-beginner";
+    if (value.includes("easy")) return "difficulty-easy";
+    if (value.includes("intermediate")) return "difficulty-intermediate";
+    if (value.includes("advanced")) return "difficulty-advanced";
+
+    return "difficulty-default";
+  };
+
+  const getScore = (score) => {
+    const number = Number(score);
+    if (!Number.isFinite(number)) return 0;
+    return Math.min(100, Math.max(0, number));
+  };
+
   if (loading) {
     return (
-      <main className="page">
-        <p>Loading project recommendations...</p>
+      <main className="recommendations-page">
+        <div className="recommendations-loading">
+          <span className="recommendations-spinner" />
+          <h2>Finding projects for you...</h2>
+          <p>Matching your career goals with project ideas.</p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="page">
-      <section className="dashboard-header">
-        <div>
-          <p className="eyebrow">
-            PROJECT RECOMMENDATIONS
-          </p>
+    <main className="recommendations-page">
+      <section className="recommendations-hero">
+        <div className="recommendations-hero-content">
+          <span className="recommendations-eyebrow">
+            <span className="recommendations-eyebrow-dot" />
+            PERSONALIZED PROJECT IDEAS
+          </span>
 
-          <h1>Projects For Your Career</h1>
+          <h1>
+            Turn your skills
+            <br />
+            into <span>real projects.</span>
+          </h1>
 
           <p>
-            Get project ideas based on your selected
-            career path and current skills.
+            Explore hands-on projects tailored to your career path.
+            Discover your skill gaps and build a portfolio that
+            demonstrates what you can do.
           </p>
+
+          <div className="recommendations-hero-tags">
+            <span>✦ Career focused</span>
+            <span>⌘ Skill matching</span>
+            <span>↗ Portfolio building</span>
+          </div>
+        </div>
+
+        <div className="recommendations-hero-visual">
+          <div className="recommendations-orbit orbit-one" />
+          <div className="recommendations-orbit orbit-two" />
+
+          <div className="recommendations-visual-card">
+            <div className="recommendations-visual-top">
+              <span className="visual-window-dot" />
+              <span className="visual-window-dot" />
+              <span className="visual-window-dot" />
+              <span className="visual-window-label">PROJECT LAB</span>
+            </div>
+
+            <div className="visual-code-line visual-code-wide" />
+            <div className="visual-code-line visual-code-short" />
+            <div className="visual-code-line visual-code-medium" />
+
+            <div className="visual-project-result">
+              <div className="visual-result-icon">✦</div>
+              <div>
+                <strong>Build something great</strong>
+                <small>One project at a time</small>
+              </div>
+              <span className="visual-result-check">✓</span>
+            </div>
+          </div>
+
+          <div className="recommendations-floating-badge">
+            <span>↗</span> Keep building
+          </div>
+        </div>
+      </section>
+
+      <section className="recommendations-section-heading">
+        <div>
+          <span className="recommendations-section-kicker">
+            YOUR NEXT STEPS
+          </span>
+          <h2>Recommended projects</h2>
+          <p>
+            Project ideas selected for your current skills and career goal.
+          </p>
+        </div>
+
+        <div className="recommendations-count">
+          <span>{recommendations.length}</span>
+          <small>
+            {recommendations.length === 1 ? "PROJECT IDEA" : "PROJECT IDEAS"}
+          </small>
         </div>
       </section>
 
       {error && (
-        <section
-          className="dashboard-card"
-          style={{
-            maxWidth: "900px",
-            margin: "30px auto",
-            background: "#fee2e2",
-            color: "#b91c1c",
-          }}
-        >
-          {error}
+        <section className="recommendations-error" role="alert">
+          <div className="recommendations-error-icon">!</div>
+          <div>
+            <h3>Couldn't load recommendations</h3>
+            <p>{error}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+          >
+            Try again
+          </button>
         </section>
       )}
 
       {!error && (
-        <section
-          className="dashboard-card"
-          style={{
-            maxWidth: "1000px",
-            margin: "30px auto",
-          }}
-        >
-          <h2>{careerPath}</h2>
+        <>
+          <section className="recommendations-career-banner">
+            <div className="recommendations-career-icon">✦</div>
+            <div className="recommendations-career-copy">
+              <small>YOUR SELECTED CAREER PATH</small>
+              <h3>{careerPath || "Career path not selected"}</h3>
+              <p>
+                {careerPath
+                  ? "Use these project ideas to practise relevant skills and strengthen your portfolio."
+                  : "Choose a career path in your profile to personalize your project recommendations."}
+              </p>
+            </div>
+            <div className="recommendations-career-action">
+              <a href="/profile">View Profile <span>→</span></a>
+            </div>
+          </section>
 
-          <p style={{ marginTop: "8px" }}>
-            These projects are selected according to your
-            current skill profile.
-          </p>
+          {recommendations.length === 0 ? (
+            <section className="recommendations-empty">
+              <div className="recommendations-empty-icon">⌘</div>
+              <h3>No project recommendations yet</h3>
+              <p>
+                Set your career path and add your current skills to your
+                profile to help personalize your project ideas.
+              </p>
+              <a href="/profile">Update Your Profile <span>→</span></a>
+            </section>
+          ) : (
+            <section className="recommendations-grid">
+              {recommendations.map((project, index) => {
+                const skills = Array.isArray(project.skills)
+                  ? project.skills
+                  : [];
 
-          <div
-            style={{
-              display: "grid",
-              gap: "20px",
-              marginTop: "25px",
-            }}
-          >
-            {recommendations.map(
-              (project, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: "22px",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "14px",
-                    background: "#ffffff",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      gap: "15px",
-                      flexWrap: "wrap",
-                    }}
+                const matchedSkills = Array.isArray(project.matchedSkills)
+                  ? project.matchedSkills
+                  : [];
+
+                const missingSkills = Array.isArray(project.missingSkills)
+                  ? project.missingSkills
+                  : [];
+
+                const score = getScore(project.relevanceScore);
+
+                return (
+                  <article
+                    className="recommendation-card"
+                    key={project._id || project.id || `${project.title}-${index}`}
                   >
-                    <div>
-                      <h3>{project.title}</h3>
+                    <div className="recommendation-card-top">
+                      <div className="recommendation-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </div>
 
-                      <p
-                        style={{
-                          marginTop: "8px",
-                          color: "#4b5563",
-                        }}
+                      <span
+                        className={`recommendation-difficulty ${getDifficultyClass(
+                          project.difficulty
+                        )}`}
                       >
-                        {project.description}
-                      </p>
+                        <span className="difficulty-dot" />
+                        {project.difficulty || "Not specified"}
+                      </span>
                     </div>
 
-                    <span
-                      style={{
-                        padding: "6px 10px",
-                        borderRadius: "20px",
-                        background: "#f3f4f6",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {project.difficulty}
-                    </span>
-                  </div>
+                    <h3>{project.title || "Untitled Project"}</h3>
 
-                  <div style={{ marginTop: "18px" }}>
-                    <strong>Skills:</strong>
+                    <p className="recommendation-description">
+                      {project.description ||
+                        "Build this project to practise your skills and gain hands-on experience."}
+                    </p>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "8px",
-                        flexWrap: "wrap",
-                        marginTop: "10px",
-                      }}
-                    >
-                      {project.skills.map(
-                        (skill, skillIndex) => (
-                          <span
-                            key={skillIndex}
-                            style={{
-                              padding: "6px 10px",
-                              borderRadius: "8px",
-                              background:
-                                "#f3f4f6",
-                              fontSize: "13px",
-                            }}
-                          >
+                    <div className="recommendation-divider" />
+
+                    <div className="recommendation-skills-heading">
+                      <span>SKILLS TO PRACTISE</span>
+                      <small>{skills.length} skills</small>
+                    </div>
+
+                    <div className="recommendation-skill-tags">
+                      {skills.length > 0 ? (
+                        skills.map((skill, skillIndex) => (
+                          <span key={`${skill}-${skillIndex}`}>
                             {skill}
                           </span>
-                        )
+                        ))
+                      ) : (
+                        <span>No skills listed</span>
                       )}
                     </div>
-                  </div>
 
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(180px, 1fr))",
-                      gap: "12px",
-                      marginTop: "20px",
-                    }}
-                  >
-                    <div>
-                      <strong>
-                        Matched Skills
-                      </strong>
+                    <div className="recommendation-match-grid">
+                      <div className="recommendation-match-box matched-box">
+                        <div className="recommendation-match-title">
+                          <span>✓</span> Matched
+                        </div>
+                        <strong>{matchedSkills.length}</strong>
+                        <small>
+                          {matchedSkills.length > 0
+                            ? matchedSkills.join(", ")
+                            : "Keep learning"}
+                        </small>
+                      </div>
 
-                      <p style={{ marginTop: "5px" }}>
-                        {project.matchedSkills
-                          .length > 0
-                          ? project.matchedSkills.join(
-                              ", "
-                            )
-                          : "None yet"}
-                      </p>
+                      <div className="recommendation-match-box missing-box">
+                        <div className="recommendation-match-title">
+                          <span>↗</span> To learn
+                        </div>
+                        <strong>{missingSkills.length}</strong>
+                        <small>
+                          {missingSkills.length > 0
+                            ? missingSkills.join(", ")
+                            : "No gaps listed"}
+                        </small>
+                      </div>
                     </div>
 
-                    <div>
-                      <strong>
-                        Missing Skills
-                      </strong>
+                    <div className="recommendation-score">
+                      <div className="recommendation-score-heading">
+                        <span>Skill relevance</span>
+                        <strong>{score}%</strong>
+                      </div>
 
-                      <p style={{ marginTop: "5px" }}>
-                        {project.missingSkills
-                          .length > 0
-                          ? project.missingSkills.join(
-                              ", "
-                            )
-                          : "None"}
-                      </p>
+                      <div
+                        className="recommendation-score-track"
+                        role="progressbar"
+                        aria-label={`Skill relevance for ${project.title || "project"}`}
+                        aria-valuenow={score}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      >
+                        <div
+                          className="recommendation-score-fill"
+                          style={{ width: `${score}%` }}
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <strong>
-                        Relevance Score
-                      </strong>
-
-                      <p style={{ marginTop: "5px" }}>
-                        {project.relevanceScore}%
-                      </p>
+                    <div className="recommendation-card-footer">
+                      <span>✦</span>
+                      <p>Learn, build, and add it to your portfolio.</p>
                     </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </section>
+                  </article>
+                );
+              })}
+            </section>
+          )}
+        </>
       )}
+
+      <section className="recommendations-bottom-banner">
+        <div className="recommendations-bottom-icon">✧</div>
+        <div>
+          <h3>Small projects. Real progress.</h3>
+          <p>
+            Practise consistently, strengthen your skills, and keep track
+            of what you build.
+          </p>
+        </div>
+        <a href="/projects">My Projects <span>→</span></a>
+      </section>
     </main>
   );
 }
